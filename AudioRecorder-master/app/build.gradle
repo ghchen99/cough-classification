@@ -1,0 +1,121 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+//apply plugin: 'com.google.firebase.crashlytics'
+//apply plugin: 'com.google.gms.google-services'
+
+def versionMajor = 0
+def versionMinor = 9
+def versionPatch = 23
+
+android {
+	compileSdkVersion 29
+	buildToolsVersion "29.0.3"
+	defaultConfig {
+		applicationId "com.dimowner.audiorecorder"
+		minSdkVersion 21
+		targetSdkVersion 29
+//		versionCode versionMajor * 10000 + versionMinor * 100 + versionPatch
+//		versionName "${versionMajor}.${versionMinor}.${versionPatch}"
+		versionCode 923
+		versionName "0.9.23"
+	}
+
+	buildFeatures {
+		viewBinding = true
+	}
+
+//	def keystorePropertiesFile = rootProject.file("keystore.properties")
+//	def keystoreProperties = new Properties()
+//	keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+	signingConfigs {
+		dev {
+			storeFile file('key/debug/debug.keystore')
+			storePassword 'android'
+			keyAlias 'androiddebugkey'
+			keyPassword 'android'
+		}
+//		release {
+//			storeFile file(keystoreProperties['prodStoreFile'])
+//			storePassword keystoreProperties['prodStorePassword']
+//			keyAlias keystoreProperties['prodKeyAlias']
+//			keyPassword keystoreProperties['prodKeyPassword']
+//		}
+	}
+
+	buildTypes {
+		release {
+			minifyEnabled true
+			shrinkResources true
+			proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//			firebaseCrashlytics {
+//				mappingFileUploadEnabled true
+//			}
+		}
+		debug {
+			minifyEnabled false
+		}
+	}
+
+	flavorDimensions "default"
+
+	productFlavors {
+		debugConfig {
+			dimension "default"
+			applicationId "com.dimowner.audiorecorder.debug"
+			signingConfig = signingConfigs.dev
+		}
+		releaseConfig {
+			dimension "default"
+			signingConfig = signingConfigs.dev
+			applicationId "com.dimowner.audiorecorder"
+		}
+	}
+
+	compileOptions {
+		sourceCompatibility = JavaVersion.VERSION_1_8
+		targetCompatibility = JavaVersion.VERSION_1_8
+	}
+
+	lintOptions {
+		abortOnError false
+	}
+}
+
+// Remove not needed buildVariants.
+android.variantFilter { variant ->
+	if (variant.buildType.name == 'release'
+			&& variant.getFlavors().get(0).name == 'debugConfig') {
+		variant.setIgnore(true)
+	}
+	if (variant.buildType.name == 'debug'
+			&& variant.getFlavors().get(0).name == 'releaseConfig') {
+		variant.setIgnore(true)
+	}
+}
+
+dependencies {
+	def androidX = "1.2.1"
+	def coroutines = "1.4.1"
+	def timber = "4.7.1"
+
+	//Kotlin
+	implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+	implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+	implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
+
+	//Timber
+	implementation "com.jakewharton.timber:timber:$timber"
+	implementation "androidx.recyclerview:recyclerview:$androidX"
+
+	implementation "androidx.viewpager2:viewpager2:1.0.0"
+
+//	// Import the BoM for the Firebase platform
+//	implementation platform('com.google.firebase:firebase-bom:26.1.0')
+//	// Declare the dependencies for the Crashlytics and Analytics libraries
+//	// When using the BoM, you don't specify versions in Firebase library dependencies
+//	implementation 'com.google.firebase:firebase-crashlytics'
+//	implementation 'com.google.firebase:firebase-analytics'
+}
