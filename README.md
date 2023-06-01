@@ -22,12 +22,6 @@ The unsupervised learning approach aimed to automatically discover patterns and 
 
 Both the supervised and unsupervised methods achieved an impressive accuracy of up to 100% on testing data, showcasing the potential effectiveness of the cough sound detection system.
 
-## Repository Structure
-- data/: Contains the raw and preprocessed audio data used in the project.
-- scripts/: Includes the Python scripts for data preprocessing, feature extraction, and classification.
-- models/: Contains the trained models or model checkpoints for both supervised and unsupervised learning approaches.
-- results/: Stores the evaluation results, including accuracy metrics, visualizations, and any relevant analysis.
-
 ## Usage
 To replicate or further develop this project, follow these steps:
 
